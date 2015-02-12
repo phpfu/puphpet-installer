@@ -20,9 +20,9 @@ class PuphpetReleaseInstallerPlugin implements PluginInterface {
 	 * @param \Composer\IO\IOInterface $io The I/O instance.
 	 * @return void
 	 */
-    public function activate(Composer $composer, IOInterface $io) {
-        // Register the custom installer.
-        $installer = new PuphpetReleaseInstaller($io, $composer);
-        $composer->getInstallationManager()->addInstaller($installer);
-    }
+	public function activate(Composer $composer, IOInterface $io) {
+		// Register the custom installer.
+		$installer = new PuphpetReleaseInstaller($io, $composer);
+		$composer->getInstallationManager()->addInstaller($installer);
+	}
 }
