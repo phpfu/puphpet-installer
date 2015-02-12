@@ -1,0 +1,23 @@
+{
+    "name": "loadsys/puphpet-release-composer-installer",
+    "description": "Provides a composer custom installer that works with `loadsys/puphpet-release` to add a PuPHPet.com vagrant box to a project via composer.",
+    "type": "composer-plugin",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Brian Porter",
+            "email": "beporter@users.sourceforge.net"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "Loadsys\\Composer": "src/"
+        }
+    },
+    "extra": {
+        "class": "Loadsys\\Composer\\PuphpetReleaseInstallerPlugin"
+    },
+    "require": {
+        "composer-plugin-api": "1.0.0"
+    }
+}
