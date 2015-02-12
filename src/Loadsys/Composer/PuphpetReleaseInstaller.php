@@ -24,25 +24,25 @@ if (!defined('DS')) {
  */
 class PuphpetReleaseInstaller extends LibraryInstaller {
 
-    /**
-     * Defines the `type`s of composer packages to which this installer applies.
-     *
-     * A project's composer.json file must specify `"type": "puphpet-release"`
-     * in order to trigger this installer.
-     *
-     * @param string $packageType The `type` specified in the consuming project's composer.json.
-     * @return bool True if this installer should be activated for the package in question, false if not.
-     */
-    public function supports($packageType) {
-        return 'puphpet-release' === $packageType;
-    }
+	/**
+	 * Defines the `type`s of composer packages to which this installer applies.
+	 *
+	 * A project's composer.json file must specify `"type": "puphpet-release"`
+	 * in order to trigger this installer.
+	 *
+	 * @param string $packageType The `type` specified in the consuming project's composer.json.
+	 * @return bool True if this installer should be activated for the package in question, false if not.
+	 */
+	public function supports($packageType) {
+		return 'puphpet-release' === $packageType;
+	}
 
 	/**
-     * Override LibraryInstaller::installCode() to hook in additional post-download steps.
-     *
-     * @param InstalledRepositoryInterface $repo    repository in which to check
-     * @param PackageInterface             $package package instance
-     */
+	 * Override LibraryInstaller::installCode() to hook in additional post-download steps.
+	 *
+	 * @param InstalledRepositoryInterface $repo    repository in which to check
+	 * @param PackageInterface             $package package instance
+	 */
 	protected function installCode(PackageInterface $package) {
 		parent::installCode($package);
 
@@ -55,10 +55,10 @@ class PuphpetReleaseInstaller extends LibraryInstaller {
 	}
 
 	/**
-     * Copy items from the installed package's release/ folder into the
-     * target directory.
-     *
-     */
+	 * Copy items from the installed package's release/ folder into the
+	 * target directory.
+	 *
+	 */
 	protected function copyReleaseItems($package) {
 		// Copy everything from the release/ subfolder to the project root.
 		$targetDir = getcwd();
@@ -88,10 +88,10 @@ class PuphpetReleaseInstaller extends LibraryInstaller {
 	}
 
 	/**
-     * Search for a config file in the consuming project and copy it into
-     * place if present.
-     *
-     */
+	 * Search for a config file in the consuming project and copy it into
+	 * place if present.
+	 *
+	 */
 	protected function copyConfigFile($package) {
 		$configFilePath = getcwd() . DS . 'puphpet.yaml';
 		$targetPath = getcwd() . DS . 'puphpet' . DS . 'config.yaml';
@@ -100,11 +100,11 @@ class PuphpetReleaseInstaller extends LibraryInstaller {
 		}
 	}
 
-    /**
-     * Check that release items copied into the consuming project are
-     * properly ignored in source control (very, VERY crudely.)
-     *
-     */
+	/**
+	 * Check that release items copied into the consuming project are
+	 * properly ignored in source control (very, VERY crudely.)
+	 *
+	 */
 	protected function checkGitIgnore($package) {
 		$gitignoreFile = getcwd() . DS . '.gitignore';
 		$required = [
