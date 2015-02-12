@@ -5,6 +5,13 @@ Provides a composer custom installer that works with `loadsys/puphpet-release` t
 You probably will never need to use this project yourself directly. We use it for our [loadsys/puphpet-release](https://github.com/loadsys/puphpet-release) package to copy parts of the PuPHPet package into the necessary locations for the consuming project.
 
 
+## :warning: Big Important Warning
+
+It's critically important to point out that this installer does things that composer [very explicitly](https://github.com/composer/installers#should-we-allow-dynamic-package-types-or-paths-no) **should not be doing.** We break this very good and wise rule only because the tools we're working with (vagrant and puphpet) leave us with no other practical choice. Again: You should **NOT** do what this package does. In all likelihood there is a better way.
+
+Even using _this_ package, there is a risk that it will overwrite existing (important!) files in your project. If you have customized your Vagrantfile, then `composer require` this project, _your `Vagrantfile` will be unceremoniously overwritten without notice._ Do not complain about this. This is what this installer is designed to do and you've been duly warned of its danger.
+
+
 ## Usage
 
 To use this installer with another composer package, add the following block to your package's `composer.json` file:
