@@ -7,9 +7,9 @@ You probably will never need to use this project yourself directly. We use it fo
 
 ## :warning: Big Important Warning
 
-It's critically important to point out that this installer does things that composer [very explicitly](https://github.com/composer/installers#should-we-allow-dynamic-package-types-or-paths-no) **should not be doing.** We break this very good and wise rule only because the tools we're working with (vagrant and puphpet) leave us with no other practical choice. Again: You should **NOT** do what this package does. In all likelihood there is a better way.
+It's critically important to point out that this installer does things that composer [very explicitly](https://github.com/composer/installers#should-we-allow-dynamic-package-types-or-paths-no) **should not be doing.** We break this very good and wise rule only because the tools we're working with (vagrant and puphpet) leave us with no other practical choice. Again: You should **NOT** do what this installer does. In all likelihood there is a better way.
 
-Even using _this_ package, there is a risk that it will overwrite existing (important!) files in your project. If you have customized your Vagrantfile, then `composer require` this project, _your `Vagrantfile` will be unceremoniously overwritten without notice._ Do not complain about this. This is what this installer is designed to do and you've been duly warned of its danger.
+If you use this installer, it will overwrite existing (important!) files in your project. If you have customized your Vagrantfile, then `composer require` a project that uses this installer, _your `Vagrantfile` file and `puphpet/` folder will be unceremoniously overwritten without notice._ Do not complain about this. This is what this installer is designed to do and you've been duly warned of its danger.
 
 
 ## Usage
@@ -48,12 +48,19 @@ Unresolved Questions:
 Testing this composer plugin is difficult because it involves at least 2 other projects: the loadsys/puphpet-release, and the project from which you want to consume it. To set up a local project that will exercise this installer and test the result of including the `loadsys/puphpet-release` package in your project, follow these instructions:
 
 1. `mkdir some-project-folder; cd some-project-folder`
+
 1. `git clone git@github.com:loadsys/puphpet-release-composer-installer.git`
+
 1. `git clone git@github.com:loadsys/puphpet-release.git`
+
 1. Create a branch in either project, and **commit** your changes to the branch. (This is very important to the process: Any changes you wish to test must exist in the git index already, not just in your working copy.)
+
 1. `mkdir test-app; cd test-app`
+
 1. Copy a previously configured and tested PuPHPet `config.yaml` file into the `test-app/` folder, but renaming it to `puphpet.yaml`.
+
 1. Create a `composer.json` file in the `test-app/` folder with the following contents:
+
 		{
 			"name": "you/test-app",
 			"description": "Tests that the puphpet-release-composer-installer performs all of its actions properly.",
@@ -75,12 +82,16 @@ Testing this composer plugin is difficult because it involves at least 2 other p
 				}
 			]
 		}
+
 	This file will instruct composer to use local git repos to fetch the dependencies listed, and to ignore the packagist.org website entirely.
+
 1. Update the targeted branches in the `require:` block of the above composer.json file to match your local working branch names in each project (remember to keep the `dev-` prefix.)
+
 1. From within the `test-app` folder, run `composer install -vvv`. (The `v`s enable highly verbose output that won't always be necessary. They're safe to exclude once you're in a rhythm.)
 	* The `test-app/` folder should end up with a `Vagrantfile` and `puphpet` folder directly in its root.
 	* Your sample `puphpet.yaml` file should have been copied to `/puphpet/config.yaml`.
 	* If you have a `.gitignore` file present, it should have been "safely" updated to include the new additions to the root project folder.
+
 1. From here, the process loops through the following steps:
 	* Make changes to the puphpet-release or puphpet-release-composer-installer projects.
 	* **Commit** the changes to your working branch.
@@ -88,6 +99,7 @@ Testing this composer plugin is difficult because it involves at least 2 other p
 	* Run `composer install` again.
 	* Check the results.
 	* Repeat.
+
 1. Once you're satisfied with the results, push your branch and submit a PR.
 
 
