@@ -25,6 +25,7 @@
         "class": "Loadsys\\Composer\\PuphpetReleaseInstallerPlugin"
     },
     "require": {
-        "composer-plugin-api": "1.0.0"
+        "composer-plugin-api": "1.0.0",
+        "symfony/filesystem": "~2.6"
     }
 }
