@@ -15,7 +15,7 @@
 		},
 		{
 			"type": "vcs",
-			"url": "../tmp/puphpet-release"
+			"url": "PR_DIRECTORY"
 		},
 		{
 			"type": "vcs",

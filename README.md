@@ -49,25 +49,22 @@ Testing this composer plugin is difficult because it involves at least 2 other p
 
 1. Check out this project: `git clone git@github.com:loadsys/puphpet-release-composer-installer.git`
 
-1. Check out a copy of the puphpet-release project somewhere to work on it. `git clone git@github.com:loadsys/puphpet-release.git`
+1. Check out a copy of the puphpet-release project somewhere to work on it. `git clone git@github.com:loadsys/puphpet-release.git` (Make a note of this path.)
 
 1. Create a feature branch in either project, and **commit** your changes to the branch. (Committing the changes is very important to the process: Any changes you wish to test must exist in the git index already, not just in your working copy.)
 
-1. `cd test`
+1. Run `./test/simulate-composer-install.sh`
 
-1. Run `./simulate-composer-install.sh`
-
-	The script will prompt you for any necessary information, write the appropriate "composer.json" changes for you, reset the tmp/ dir for use, and execute a `composer install` command for you in the tmp/ dir where you can review the results.
+	The script will prompt you for any necessary information, reset the tmp/ dir for use, write the appropriate "composer.json" changes for you, and execute a `composer install` command for you in the tmp/ dir where you can review the results.
 
 	* The `tmp/` folder should end up with a `Vagrantfile` and `puphpet/` folder in it.
-	* The sample `tmp/puphpet.yaml` file should have been copied to `/puphpet/config.yaml`.
+	* The sample `tmp/puphpet.yaml` file should have been copied to `tmp/puphpet/config.yaml`.
 	* If you have a `.gitignore` file present, it should have been "safely" updated to include the new additions to the "root" project folder (`tmp/`).
 
 1. From here, the process loops through the following steps:
 	* Make changes to the puphpet-release or puphpet-release-composer-installer projects.
 	* **Commit** the changes to your working branch.
-	* Remove some files from `test-app/` to get clean results each time. Something like `rm -rf vendor composer.lock Vagrantfile puphpet;` should do the trick.
-	* Run `composer install` again.
+	* Run `./test/simulate-composer-install.sh` again.
 	* Check the results.
 	* Repeat.
 
