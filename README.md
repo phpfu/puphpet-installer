@@ -45,52 +45,23 @@ Unresolved Questions:
 
 ## Contributing
 
-Testing this composer plugin is difficult because it involves at least 2 other projects: the loadsys/puphpet-release, and the project from which you want to consume it. To set up a local project that will exercise this installer and test the result of including the `loadsys/puphpet-release` package in your project, follow these instructions:
+Testing this composer plugin is difficult because it involves at least 2 other projects: the loadsys/puphpet-release, and the project from which you want to consume it. This project contains a `test/` directory that is set up to exercise this installer and test the result of including the `loadsys/puphpet-release` package in a consumer project. To use it:
 
-1. `mkdir some-project-folder; cd some-project-folder`
+1. Check out this project: `git clone git@github.com:loadsys/puphpet-release-composer-installer.git`
 
-1. `git clone git@github.com:loadsys/puphpet-release-composer-installer.git`
+1. Check out a copy of the puphpet-release project somewhere to work on it. `git clone git@github.com:loadsys/puphpet-release.git`
 
-1. `git clone git@github.com:loadsys/puphpet-release.git`
+1. Create a feature branch in either project, and **commit** your changes to the branch. (Committing the changes is very important to the process: Any changes you wish to test must exist in the git index already, not just in your working copy.)
 
-1. Create a branch in either project, and **commit** your changes to the branch. (This is very important to the process: Any changes you wish to test must exist in the git index already, not just in your working copy.)
+1. `cd test`
 
-1. `mkdir test-app; cd test-app`
+1. Run `./simulate-composer-install.sh`
 
-1. Copy a previously configured and tested PuPHPet `config.yaml` file into the `test-app/` folder, but renaming it to `puphpet.yaml`.
+	The script will prompt you for any necessary information, write the appropriate "composer.json" changes for you, reset the tmp/ dir for use, and execute a `composer install` command for you in the tmp/ dir where you can review the results.
 
-1. Create a `composer.json` file in the `test-app/` folder with the following contents:
-
-		{
-			"name": "you/test-app",
-			"description": "Tests that the puphpet-release-composer-installer performs all of its actions properly.",
-			"require": {
-				"loadsys/puphpet-release-composer-installer": "dev-yourWorkingBranchNameHere",
-				"loadsys/puphpet-release": "dev-yourWorkingBranchNameHere"
-			},
-			"repositories": [
-				{
-					"packagist": false
-				},
-				{
-					"type": "vcs",
-					"url": "../puphpet-release"
-				},
-				{
-					"type": "vcs",
-					"url": "../puphpet-release-composer-installer"
-				}
-			]
-		}
-
-	This file will instruct composer to use local git repos to fetch the dependencies listed, and to ignore the packagist.org website entirely.
-
-1. Update the targeted branches in the `require:` block of the above composer.json file to match your local working branch names in each project (remember to keep the `dev-` prefix.)
-
-1. From within the `test-app` folder, run `composer install -vvv`. (The `v`s enable highly verbose output that won't always be necessary. They're safe to exclude once you're in a rhythm.)
-	* The `test-app/` folder should end up with a `Vagrantfile` and `puphpet` folder directly in its root.
-	* Your sample `puphpet.yaml` file should have been copied to `/puphpet/config.yaml`.
-	* If you have a `.gitignore` file present, it should have been "safely" updated to include the new additions to the root project folder.
+	* The `tmp/` folder should end up with a `Vagrantfile` and `puphpet/` folder in it.
+	* The sample `tmp/puphpet.yaml` file should have been copied to `/puphpet/config.yaml`.
+	* If you have a `.gitignore` file present, it should have been "safely" updated to include the new additions to the "root" project folder (`tmp/`).
 
 1. From here, the process loops through the following steps:
 	* Make changes to the puphpet-release or puphpet-release-composer-installer projects.

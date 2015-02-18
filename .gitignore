@@ -1,2 +1,6 @@
 # Ignore composer deps.
 /vendor/
+
+# Ignore the folder we use when testing the installer.
+/tmp/*
+!/tmp/.gitkeep

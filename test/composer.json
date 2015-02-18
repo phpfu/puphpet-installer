@@ -1,0 +1,25 @@
+{
+	"name": "me/test-composer-installer",
+	"description": "Template file for testing the puphpet-release-composer-installer. Written to ../tmp/ with proper branch names.",
+	"require": {
+		"loadsys/puphpet-release-composer-installer": "dev-PRCI_BRANCH_NAME",
+		"loadsys/puphpet-release": "dev-PR_BRANCH_NAME"
+	},
+	"repositories": [
+		{
+			"packagist": false
+		},
+		{
+			"type": "vcs",
+			"url": "https://github.com/symfony/Filesystem.git"
+		},
+		{
+			"type": "vcs",
+			"url": "../tmp/puphpet-release"
+		},
+		{
+			"type": "vcs",
+			"url": "../"
+		}
+	]
+}
