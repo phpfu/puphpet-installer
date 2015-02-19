@@ -1,27 +1,25 @@
 language: php
 php:
   - '5.6'
-  - '5.5'
-  - '5.4'
+#  - '5.5'
+#  - '5.4'
+#matrix:
+#  fast_finish: true
 env:
   global:
     # Contains a $GITHUB_TOKEN env var for use with composer to avoid API limits.
-    - secure: "RVvhh7z5EmbmgtkPt812mZ6pspQ0nW3sAVGsqM/j8J1IFvlQeFDLQ7jlsXnwY1eV1Yb5Y9cVBXAgAmXjkYSQWqJ6NoBwFhMRBzN/bNejM7Wc6aF/x9Y9TgXc6kYn9+JJuFOTxuTkyWdS0ijXxVHJ/SkeOqM9ickmhxYp1Br7y5w="
+    - secure: "WYBOW8/BG4/t9EQn5NWJ8k64v/H2fI15Z7tp6VwiqmD3Xlp+sG8TtHYIEnRJZFzVB+Mx9ghmgpf2fOMwPEY79dhHNcWwhLtgYn2rs9+FYSft4npauYS6dHttZOtDiyEIqmELGz0gnBpXA/X3ufMgtSplco2yz+LeC1TR7F3cYc4="
 branches:
   except:
-    - master
-    - staging
     - gh-pages
 install:
   - composer config -g github-oauth.github.com $GITHUB_TOKEN
-  - composer install --dev --no-interaction
-  - git clone https://github.com/loadsys/puphpet-release.git tmp/release-project
-before_script:
-  - phpenv rehash
+  - composer install --no-interaction
+  - git clone https://github.com/loadsys/puphpet-release.git build/release-project
 script:
   # Run unit tests.
-  #- phpunit
+  - vendor/bin/phpunit
   # Run integration tests.
-  - test/simulate-composer-install.sh -t master
+  - tests/integration/simulate-composer-install.sh -t master
 notifications:
   email: false

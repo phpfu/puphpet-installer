@@ -1,5 +1,7 @@
 # puphpet-release-composer-installer
 
+[![Build Status](https://travis-ci.org/loadsys/puphpet-release-composer-installer.svg?branch=master)](https://travis-ci.org/loadsys/puphpet-release-composer-installer)
+
 Provides a composer custom installer that works with `loadsys/puphpet-release` to add a PuPHPet.com vagrant box to a project via composer.
 
 You probably will never need to use this project yourself directly. We use it for our [loadsys/puphpet-release](https://github.com/loadsys/puphpet-release) package to copy parts of the PuPHPet package into the necessary locations for the consuming project.
