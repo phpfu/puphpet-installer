@@ -1,16 +1,6 @@
 #!/usr/bin/env bash
 
 #---------------------------------------------------------------------
-# Use like: `die 127 "message for failure"`
-die () {
-	#echo $? #@DEBUG
-	rc=$1
-	shift
-	echo "!!" "$@" >&2
-	exit $rc
-}
-
-#---------------------------------------------------------------------
 usage () {
 	cat <<EOT
 
@@ -32,7 +22,15 @@ if [ "$1" = '-h' ]; then
 	usage
 fi
 
-#set -x  #@DEBUG: Enable for debugging output.
+#---------------------------------------------------------------------
+# Use like: `die 127 "message for failure"`
+die () {
+	rc=$1
+	shift
+	echo "!!" "$@" >&2
+	exit $rc
+}
+
 
 # Define working directories.
 BASE_DIR="$( cd -P "$( dirname "$0" )"/.. >/dev/null 2>&1 && pwd )"
@@ -58,7 +56,9 @@ if [ -h "${RELEASE_PROJECT_SYMLINK}" ]; then
 elif [ -d "${RELEASE_PROJECT_SYMLINK}" ]; then
 	RELEASE_PROJECT_PATH="${RELEASE_PROJECT_SYMLINK}"
 elif [ "${TEST_MODE}" ]; then
-	echo "!! No symlink to the release project working copy is present at \`${RELEASE_PROJECT_SYMLINK}\`. Please create it."
+	echo "!! No symlink to the release project working copy"
+	echo "!! is present at \`${RELEASE_PROJECT_SYMLINK}\`."
+	echo "!! Please create it."
 	exit 1
 else
 	read -p "  Please provide the path to the release project working copy > " RELEASE_PROJECT_PATH
@@ -143,4 +143,4 @@ grep -qe '^canary: "foo"$' "${TMP_DIR}/puphpet/config.yaml" \
 
 
 echo "## Done testing the results of \`composer install\`. No errors encountered."
-exit 0;
+exit 0
