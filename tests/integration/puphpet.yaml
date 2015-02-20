@@ -3,7 +3,7 @@ readme:
     - 'Minimal config file to test the puphpet-release-composer-installer.'
     - 'Not having this file screws up `vagrant global-status`.'
     - 'Just have to define enough keys for the Vagrantfile to load successfully.'
-    - 'No not change the next line. It is used during the test suite to confirm'
+    - 'Do not change the next line. It is used during the test suite to confirm'
     - 'that this file was copied into place correctly.'
 canary: "foo"
 vagrantfile-local:

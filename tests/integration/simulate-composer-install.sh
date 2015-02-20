@@ -22,14 +22,9 @@ if [ "$1" = '-h' ]; then
 	usage
 fi
 
-#---------------------------------------------------------------------
-# Use like: `die 127 "message for failure"`
-die () {
-	rc=$1
-	shift
-	echo "!!" "$@" >&2
-	exit $rc
-}
+
+SHUNIT_FETCH_URL="https://shunit2.googlecode.com/files/shunit2-2.1.6.tgz"
+SHUNIT_DOWNLOAD_VERSION=$(basename "${SHUNIT_FETCH_URL}" '.tgz')
 
 
 # Define working directories.
@@ -49,7 +44,7 @@ fi
 
 # Make sure the build dir exists.
 if [ ! -d "${BUILD_DIR}" ]; then
-	echo "## Creating build folder."
+	echo "## Creating build directory."
 	mkdir -p "${BUILD_DIR}"
 fi
 
@@ -77,6 +72,7 @@ fi
 if [ "${TEST_MODE}" ]; then
 	# In testing mode, just default to master when no arg provided.
 	RELEASE_PROJECT_BRANCH=${1:-master}
+	shift
 elif [ -n "$1" ]; then
 	RELEASE_PROJECT_BRANCH=$1
 else
@@ -105,12 +101,12 @@ echo "## Purging old files from build directory."
 shopt -s dotglob extglob
 (
 	cd "${BUILD_DIR}"
-	rm -rf !(.|..|.gitkeep|release-project)
+	rm -rf !(.|..|.gitkeep|release-project|${SHUNIT_DOWNLOAD_VERSION})
 )
 
 
 # Copy the testing files from tests/integration/ to build/.
-echo "## Populating the build/ folder."
+echo "## Populating the build directory."
 shopt -s dotglob
 (
 	cd "${TEST_DIR}"
@@ -130,39 +126,75 @@ sed \
  >"${BUILD_DIR}/composer.json"
 
 
-# From here out, abort if we hit any errors.
-set -e
-
-
 # Execute the `composer install` command itself.
 echo "## Executing \`composer install\` in the build directory."
-(
-	cd "${BUILD_DIR}/"
+COMPOSER_OUTPUT=$(
+	cd "${BUILD_DIR}/";
 	composer install --no-interaction --ignore-platform-reqs
 )
+COMPOSER_EXIT_CODE=$?
 
 # End the script if test mode is OFF.
 if [ -z "${TEST_MODE}" ]; then
-	echo "## Done simulating \`composer install\`. Examine the results in \`${BUILD_DIR}\`."
-	exit 0
+	if [ "${COMPOSER_EXIT_CODE}" ]; then
+		echo "!! Composer installation failed. Examine the results in \`${BUILD_DIR}\`."
+		echo ''
+		echo "${COMPOSER_OUTPUT}"
+		exit $COMPOSER_EXIT_CODE
+	else
+		echo "## Done simulating \`composer install\`. Examine the results in \`${BUILD_DIR}\`."
+		exit 0
+	fi
 fi
 
 
-# In test mode, check for canary values, exit >0 if any are missing. (We could run this script via travis as a test suite.)
-echo "## Executing tests."
-
-grep -qe '^/Vagrantfile$' "${BUILD_DIR}/.gitignore" \
- || die 101 ".gitignore missing required '/Vagrantfile' entry."
-
-grep -qe '^/puphpet/$' "${BUILD_DIR}/.gitignore" \
- || die 102 ".gitignore missing required '/puphpet/' entry."
-
-[ -d "${BUILD_DIR}/puphpet" ] \
- || die 103 "Expected puphpet/ directory is not present."
-
-grep -qe '^canary: "foo"$' "${BUILD_DIR}/puphpet/config.yaml" \
- || die 104 "puphpet.yaml file was not properly copied into puphpet/ directory."
+# In test mode, run assertions using the shunit2 test framework.
+# (We run this script via travis as an integration test suite.)
 
 
-echo "## Done testing the results of \`composer install\`. No errors encountered."
-exit 0
+# Make sure we have shunit2 available.
+SHUNIT_TMP_DOWNLOAD="${BUILD_DIR}/${SHUNIT_DOWNLOAD_VERSION}.tgz"
+SHUNIT_EXTRACT_PATH="${BUILD_DIR}"
+SHUNIT_EXECUTABLE="${SHUNIT_EXTRACT_PATH}/${SHUNIT_DOWNLOAD_VERSION}/src/shunit2"
+if [ ! -x "${SHUNIT_EXECUTABLE}" ]; then
+	if [ ! -f "${SHUNIT_TMP_DOWNLOAD}" ]; then
+		echo "## Fetching shunit2."
+		curl -L \
+			--silent \
+			--output "${SHUNIT_TMP_DOWNLOAD}" \
+			$SHUNIT_FETCH_URL
+	fi
+	echo "## Unpacking shunit2."
+	tar zxf "${SHUNIT_TMP_DOWNLOAD}" -C "${SHUNIT_EXTRACT_PATH}"
+fi
+
+
+# Define the tests to execute.
+echo "## Defining tests."
+testComposerExitCode () {
+	assertTrue "composer must not error during install.
+
+${COMPOSER_OUTPUT}
+		" "$COMPOSER_EXIT_CODE"
+}
+
+testGitignore () {
+	grep -qe '^/Vagrantfile$' "${BUILD_DIR}/.gitignore"
+	assertTrue ".gitignore must have a '/Vagrantfile' entry." "$?"
+
+	grep -qe '^/puphpet/$' "${BUILD_DIR}/.gitignore"
+	assertTrue ".gitignore must have a '/puphpet/' entry." "$?"
+}
+
+testPuphpetDir () {
+	[ -d "${BUILD_DIR}/puphpet" ]
+	assertTrue "puphpet/ directory must be present." "$?" || return
+
+	grep -qe '^canary: "foo"$' "${BUILD_DIR}/puphpet/config.yaml"
+	assertTrue "puphpet.yaml file must be copied into puphpet/ directory." "$?"
+}
+
+# Load and run shUnit2
+echo "## Executing tests:"
+. "${SHUNIT_EXECUTABLE}"
+

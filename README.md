@@ -47,7 +47,16 @@ Unresolved Questions:
 
 ## Contributing
 
-Testing this composer plugin is difficult because it involves at least 2 other projects: the loadsys/puphpet-release, and the project from which you want to consume it. This project contains a `test/` directory that is set up to exercise this installer and test the result of including the `loadsys/puphpet-release` package in a consumer project. To use it:
+
+### Running Unit Tests
+
+* `composer install`
+* `vendor/bin/phpunit`
+
+
+### Manually Testing Installer Output
+
+Testing this composer plugin is difficult because it involves at least 2 other projects: the loadsys/puphpet-release, and the project from which you want to consume it. This project contains a `tests/integration/` directory that is set up to exercise this installer and test the result of including the `loadsys/puphpet-release` package in a consumer project. To use it:
 
 1. Check out this project: `git clone git@github.com:loadsys/puphpet-release-composer-installer.git`
 
@@ -55,22 +64,31 @@ Testing this composer plugin is difficult because it involves at least 2 other p
 
 1. Create a feature branch in either project, and **commit** your changes to the branch. (Committing the changes is very important to the process: Any changes you wish to test must exist in the git index already, not just in your working copy.)
 
-1. Run `./test/simulate-composer-install.sh`
+1. Run `./tests/integration/simulate-composer-install.sh`
 
-	The script will prompt you for any necessary information, reset the tmp/ dir for use, write the appropriate "composer.json" changes for you, and execute a `composer install` command for you in the tmp/ dir where you can review the results.
+	The script will prompt you for any necessary information, reset the build/ dir for use, write the appropriate "composer.json" changes for you, and execute a `composer install` command for you in the build/ dir where you can review the results.
 
-	* The `tmp/` folder should end up with a `Vagrantfile` and `puphpet/` folder in it.
-	* The sample `tmp/puphpet.yaml` file should have been copied to `tmp/puphpet/config.yaml`.
-	* If you have a `.gitignore` file present, it should have been "safely" updated to include the new additions to the "root" project folder (`tmp/`).
+	* The `build/` folder should end up with a `Vagrantfile` and `puphpet/` folder in it.
+	* The sample `build/puphpet.yaml` file should have been copied to `build/puphpet/config.yaml`.
+	* The sample `.gitignore` file should have been "safely" updated to include the new additions to the "root" project folder (`build/`).
 
 1. From here, the process loops through the following steps:
 	* Make changes to the puphpet-release or puphpet-release-composer-installer projects.
 	* **Commit** the changes to your working branch.
-	* Run `./test/simulate-composer-install.sh` again.
-	* Check the results.
+	* Run `./tests/integration/simulate-composer-install.sh` again.
+	* Check the results in the `build/` directory.
 	* Repeat.
 
 1. Once you're satisfied with the results, push your branch and submit a PR.
+
+
+### Running Integration Tests
+
+The simulation script also includes a number of functional tests for verifying the results of the installer's operation. Use the `-t` flag to enable them.
+
+* `./tests/integration/simulate-composer-install.sh -t [puphpet-release-branchname]` # Release project branch name defaults to `master`.
+
+The script will report any errors and exit non-zero on failure.
 
 
 ## License
