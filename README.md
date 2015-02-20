@@ -1,5 +1,7 @@
 # puphpet-release-composer-installer
 
+[![Build Status](https://travis-ci.org/loadsys/puphpet-release-composer-installer.svg?branch=master)](https://travis-ci.org/loadsys/puphpet-release-composer-installer)
+
 Provides a composer custom installer that works with `loadsys/puphpet-release` to add a PuPHPet.com vagrant box to a project via composer.
 
 You probably will never need to use this project yourself directly. We use it for our [loadsys/puphpet-release](https://github.com/loadsys/puphpet-release) package to copy parts of the PuPHPet package into the necessary locations for the consuming project.
@@ -45,62 +47,48 @@ Unresolved Questions:
 
 ## Contributing
 
-Testing this composer plugin is difficult because it involves at least 2 other projects: the loadsys/puphpet-release, and the project from which you want to consume it. To set up a local project that will exercise this installer and test the result of including the `loadsys/puphpet-release` package in your project, follow these instructions:
 
-1. `mkdir some-project-folder; cd some-project-folder`
+### Running Unit Tests
 
-1. `git clone git@github.com:loadsys/puphpet-release-composer-installer.git`
+* `composer install`
+* `vendor/bin/phpunit`
 
-1. `git clone git@github.com:loadsys/puphpet-release.git`
 
-1. Create a branch in either project, and **commit** your changes to the branch. (This is very important to the process: Any changes you wish to test must exist in the git index already, not just in your working copy.)
+### Manually Testing Installer Output
 
-1. `mkdir test-app; cd test-app`
+Testing this composer plugin is difficult because it involves at least 2 other projects: the loadsys/puphpet-release, and the project from which you want to consume it. This project contains a `tests/integration/` directory that is set up to exercise this installer and test the result of including the `loadsys/puphpet-release` package in a consumer project. To use it:
 
-1. Copy a previously configured and tested PuPHPet `config.yaml` file into the `test-app/` folder, but renaming it to `puphpet.yaml`.
+1. Check out this project: `git clone git@github.com:loadsys/puphpet-release-composer-installer.git`
 
-1. Create a `composer.json` file in the `test-app/` folder with the following contents:
+1. Check out a copy of the puphpet-release project somewhere to work on it. `git clone git@github.com:loadsys/puphpet-release.git` (Make a note of this path.)
 
-		{
-			"name": "you/test-app",
-			"description": "Tests that the puphpet-release-composer-installer performs all of its actions properly.",
-			"require": {
-				"loadsys/puphpet-release-composer-installer": "dev-yourWorkingBranchNameHere",
-				"loadsys/puphpet-release": "dev-yourWorkingBranchNameHere"
-			},
-			"repositories": [
-				{
-					"packagist": false
-				},
-				{
-					"type": "vcs",
-					"url": "../puphpet-release"
-				},
-				{
-					"type": "vcs",
-					"url": "../puphpet-release-composer-installer"
-				}
-			]
-		}
+1. Create a feature branch in either project, and **commit** your changes to the branch. (Committing the changes is very important to the process: Any changes you wish to test must exist in the git index already, not just in your working copy.)
 
-	This file will instruct composer to use local git repos to fetch the dependencies listed, and to ignore the packagist.org website entirely.
+1. Run `./tests/integration/simulate-composer-install.sh`
 
-1. Update the targeted branches in the `require:` block of the above composer.json file to match your local working branch names in each project (remember to keep the `dev-` prefix.)
+	The script will prompt you for any necessary information, reset the build/ dir for use, write the appropriate "composer.json" changes for you, and execute a `composer install` command for you in the build/ dir where you can review the results.
 
-1. From within the `test-app` folder, run `composer install -vvv`. (The `v`s enable highly verbose output that won't always be necessary. They're safe to exclude once you're in a rhythm.)
-	* The `test-app/` folder should end up with a `Vagrantfile` and `puphpet` folder directly in its root.
-	* Your sample `puphpet.yaml` file should have been copied to `/puphpet/config.yaml`.
-	* If you have a `.gitignore` file present, it should have been "safely" updated to include the new additions to the root project folder.
+	* The `build/` folder should end up with a `Vagrantfile` and `puphpet/` folder in it.
+	* The sample `build/puphpet.yaml` file should have been copied to `build/puphpet/config.yaml`.
+	* The sample `.gitignore` file should have been "safely" updated to include the new additions to the "root" project folder (`build/`).
 
 1. From here, the process loops through the following steps:
 	* Make changes to the puphpet-release or puphpet-release-composer-installer projects.
 	* **Commit** the changes to your working branch.
-	* Remove some files from `test-app/` to get clean results each time. Something like `rm -rf vendor composer.lock Vagrantfile puphpet;` should do the trick.
-	* Run `composer install` again.
-	* Check the results.
+	* Run `./tests/integration/simulate-composer-install.sh` again.
+	* Check the results in the `build/` directory.
 	* Repeat.
 
 1. Once you're satisfied with the results, push your branch and submit a PR.
+
+
+### Running Integration Tests
+
+The simulation script also includes a number of functional tests for verifying the results of the installer's operation. Use the `-t` flag to enable them.
+
+* `./tests/integration/simulate-composer-install.sh -t [puphpet-release-branchname]` # Release project branch name defaults to `master`.
+
+The script will report any errors and exit non-zero on failure.
 
 
 ## License

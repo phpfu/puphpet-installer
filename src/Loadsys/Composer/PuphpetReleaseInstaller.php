@@ -10,6 +10,7 @@ use Composer\Installer\LibraryInstaller;
 use \RecursiveDirectoryIterator;
 use \RecursiveCallbackFilterIterator;
 use \RecursiveIteratorIterator;
+use Symfony\Component\Filesystem\Filesystem;
 
 if (!defined('DS')) {
 	define('DS', DIRECTORY_SEPARATOR);
@@ -49,20 +50,20 @@ class PuphpetReleaseInstaller extends LibraryInstaller {
 		if (!$this->supports($package->getType())) {
 			return;
 		}
-		$this->copyReleaseItems($package);
+		$this->mirrorReleaseItems($package);
 		$this->copyConfigFile($package);
 		$this->checkGitignore($package);
 	}
 
 	/**
-	 * Copy items from the installed package's release/ folder into the
-	 * target directory.
+	 * Mirror (copy or delete, only as necessary) items from the installed
+	 * package's release/ folder into the target directory.
 	 *
 	 */
-	protected function copyReleaseItems($package) {
+	protected function mirrorReleaseItems($package) {
 		// Copy everything from the release/ subfolder to the project root.
-		$targetDir = getcwd();
 		$releaseDir = $this->getInstallPath($package) . DS . 'release';
+		$targetDir = getcwd();
 		$acceptList = [
 			'Vagrantfile',
 			'puphpet',
@@ -77,14 +78,8 @@ class PuphpetReleaseInstaller extends LibraryInstaller {
 		$filterIterator = new RecursiveCallbackFilterIterator($dirIterator, $acceptFunc);
 		$releaseItems = new RecursiveIteratorIterator($filterIterator, RecursiveIteratorIterator::SELF_FIRST);
 
-		foreach ($releaseItems as $file) {
-			// Ref: http://stackoverflow.com/a/20092223/70876
-			if ($file->isDir()) {
-				mkdir($targetDir . DS . $releaseItems->getSubPathName());
-			} else {
-				copy($file, $targetDir . DS . $releaseItems->getSubPathName());
-			}
-		}
+		$filesystem = new Filesystem();
+		$filesystem->mirror($releaseDir, $targetDir, $releaseItems, ['override' => true]);
 	}
 
 	/**
