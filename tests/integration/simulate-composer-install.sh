@@ -184,6 +184,9 @@ testGitignore () {
 
 	grep -qe '^/puphpet/$' "${BUILD_DIR}/.gitignore"
 	assertTrue ".gitignore must have a '/puphpet/' entry." "$?"
+
+	grep -qe '^/.vagrant/$' "${BUILD_DIR}/.gitignore"
+	assertTrue ".gitignore must have a '/.vagrant/' entry." "$?"
 }
 
 testPuphpetDir () {

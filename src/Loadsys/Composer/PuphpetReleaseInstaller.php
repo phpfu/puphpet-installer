@@ -105,6 +105,7 @@ class PuphpetReleaseInstaller extends LibraryInstaller {
 		$required = [
 			'/Vagrantfile',
 			'/puphpet/',
+			'/.vagrant/',
 		];
 
 		try {
