@@ -111,6 +111,7 @@ shopt -s dotglob
 (
 	cd "${TEST_DIR}"
 	cp -R * "${BUILD_DIR}/"
+	mkdir "${BUILD_DIR}/.git/"
 )
 
 shopt -u dotglob extglob

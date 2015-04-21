@@ -101,6 +101,12 @@ class PuphpetReleaseInstaller extends LibraryInstaller {
 	 *
 	 */
 	protected function checkGitIgnore($package) {
+		$gitFolder = getcwd() . DS . '.git' . DS;
+
+		if (!file_exists($gitFolder)) {
+			return;
+		}
+
 		$gitignoreFile = getcwd() . DS . '.gitignore';
 		$required = [
 			'/Vagrantfile',
@@ -108,17 +114,15 @@ class PuphpetReleaseInstaller extends LibraryInstaller {
 			'/.vagrant/',
 		];
 
-		try {
-			$lines = file($gitignoreFile, FILE_IGNORE_NEW_LINES);
-		} catch (Exception $e) {
-			return;
-		}
+		touch($gitignoreFile);
+		$lines = file($gitignoreFile, FILE_IGNORE_NEW_LINES);
 
 		foreach ($required as $entry) {
 			if (!in_array($entry, $lines)) {
 				$lines[] = $entry;
 			}
 		}
+
 		file_put_contents($gitignoreFile, implode(PHP_EOL, $lines));
 	}
 }
