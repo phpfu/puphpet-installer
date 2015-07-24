@@ -88,6 +88,8 @@ if [[ -n "${TRAVIS_PULL_REQUEST}" && "${TRAVIS_PULL_REQUEST}" -ne "false" ]]; th
 		cd "${BASE_DIR}" >/dev/null 2>&1
 		git checkout -qb $INSTALLER_PROJECT_BRANCH
 	)
+elif [ -n "${TRAVIS_TAG}" ]; then
+	INSTALLER_PROJECT_BRANCH="${TRAVIS_TAG}"
 elif [ -n "${TRAVIS_COMMIT}" ]; then
 	INSTALLER_PROJECT_BRANCH="${TRAVIS_BRANCH}#${TRAVIS_COMMIT}"
 else
