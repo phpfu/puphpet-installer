@@ -82,7 +82,25 @@ echo "## Release project branch name is \`${RELEASE_PROJECT_BRANCH}\`."
 
 
 # Get the name of the branch that is currently checked out in ../ to use.
-if [[ -n "${TRAVIS_PULL_REQUEST}" && "${TRAVIS_PULL_REQUEST}" -ne "false" ]]; then
+# echo "   !! DEBUG VALUES !!"
+# echo "   TRAVIS_TAG=          $TRAVIS_TAG"
+# echo "   TRAVIS_PULL_REQUEST= $TRAVIS_PULL_REQUEST"
+# echo "   TRAVIS_COMMIT=       $TRAVIS_COMMIT"
+# echo "   TRAVIS_BRANCH=       $TRAVIS_BRANCH"
+
+if [ -n "${TRAVIS_TAG}" ]; then
+	echo ""
+	echo "!! Unable to perform integration tests against git tags in Travis !!"
+	echo ""
+	echo "   Travis does not identify the originating branch name when     "
+	echo "   executing a build for a git tag (TRAVIS_BRANCH is unhelpfully "
+	echo "   the same as TRAVIS_TAG), and Composer does not provide a      "
+	echo "   way to target a non-version-number tag name, so we can not    "
+	echo "   write a custom composer.json to complete this build.          "
+	echo ""
+	echo "   Exiting 0"
+	exit 0
+elif [[ -n "${TRAVIS_PULL_REQUEST}" && "${TRAVIS_PULL_REQUEST}" -ne "false" ]]; then
 	INSTALLER_PROJECT_BRANCH="pull/${TRAVIS_PULL_REQUEST}/merge"
 	(
 		cd "${BASE_DIR}" >/dev/null 2>&1
