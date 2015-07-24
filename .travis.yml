@@ -23,7 +23,5 @@ script:
   - vendor/bin/phpunit
   # Run integration tests.
   - tests/integration/simulate-composer-install.sh -t master
-after-script:
-  - cat build/composer.json
 notifications:
   email: false
