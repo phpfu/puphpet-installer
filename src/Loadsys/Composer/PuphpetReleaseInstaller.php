@@ -72,7 +72,7 @@ class PuphpetReleaseInstaller extends LibraryInstaller
         // Return true if the first part of the subpath for the current file exists in the accept array.
         $acceptFunc = function ($current, $key, RecursiveDirectoryIterator $iterator) use ($acceptList) {
             $pathComponents = explode(DS, $iterator->getSubPathname());
-            return in_array($pathComponents[0], $acceptList, true);
+            return in_array($pathComponents[0], $acceptList, true) && end($pathComponents) !== 'empty';
         };
         $dirIterator = new RecursiveDirectoryIterator($releaseDir, RecursiveDirectoryIterator::SKIP_DOTS);
         $filterIterator = new RecursiveCallbackFilterIterator($dirIterator, $acceptFunc);

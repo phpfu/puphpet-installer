@@ -227,10 +227,13 @@ testGitignore () {
 
 testPuphpetDir () {
     [ -d "${BUILD_DIR}/puphpet" ]
-    assertTrue "puphpet/ directory must be present." "$?" || return
+    assertTrue "'puphpet/' directory must be present." "$?" || return
 
     [ -f "${BUILD_DIR}/Vagrantfile" ]
-    assertTrue "Vagrantfile must be present." "$?" || return
+    assertTrue "'Vagrantfile' must be present." "$?" || return
+
+    [ ! -f "${BUILD_DIR}/puphpet/files/exec-always/empty" ]
+    assertTrue "'empty' files should not be present." "$?" || return
 }
 
 # Load and run shUnit2
