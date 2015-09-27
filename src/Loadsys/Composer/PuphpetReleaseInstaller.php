@@ -51,7 +51,6 @@ class PuphpetReleaseInstaller extends LibraryInstaller
         }
 
         $this->mirrorReleaseItems($package);
-        $this->copyConfigFile($package);
         $this->checkGitignore($package);
     }
 
@@ -81,20 +80,6 @@ class PuphpetReleaseInstaller extends LibraryInstaller
 
         $filesystem = new Filesystem();
         $filesystem->mirror($releaseDir, $targetDir, $releaseItems, ['override' => true]);
-    }
-
-    /**
-     * Search for a config file in the consuming project and copy it into
-     * place if present.
-     *
-     */
-    protected function copyConfigFile($package)
-    {
-        $configFilePath = getcwd() . DS . 'puphpet.yaml';
-        $targetPath = getcwd() . DS . 'puphpet' . DS . 'config.yaml';
-        if (is_readable($configFilePath)) {
-            copy($configFilePath, $targetPath);
-        }
     }
 
     /**

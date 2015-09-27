@@ -229,8 +229,8 @@ testPuphpetDir () {
     [ -d "${BUILD_DIR}/puphpet" ]
     assertTrue "puphpet/ directory must be present." "$?" || return
 
-    grep -qe '^canary: "foo"$' "${BUILD_DIR}/puphpet/config.yaml"
-    assertTrue "puphpet.yaml file must be copied into puphpet/ directory." "$?"
+    [ -f "${BUILD_DIR}/Vagrantfile" ]
+    assertTrue "Vagrantfile must be present." "$?" || return
 }
 
 # Load and run shUnit2
