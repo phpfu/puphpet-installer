@@ -33,7 +33,7 @@ This installer is responsible for performing post-`composer install` actions for
 When this package is included in another project via composer, the installer fires a number of additional actions in order to address some of the incompatibilities between puphpet's default setup and the requirements for Vagrant (such as the `Vagrantfile` living in the project's root directory instead of the composer-installed `/vendors/loadsys/puphpet-release/release/` folder.)
 
 * Copies a Vagrantfile into the consuming project's root folder.
-* Copies a puphpet/ folder into the consuming project's root folder. 
+* Copies a puphpet/ folder into the consuming project's root folder.
 * Copies the consuming project's `/puphpet.yaml` into the correct place as `/puphpet/config.yaml`.
 * Tries to ensure that the consuming project's `/.gitignore` file contains the proper entries to ignore `/Vagrantfile` and `/puphpet/`, if it is present.
 
@@ -66,18 +66,18 @@ Testing this composer plugin is difficult because it involves at least 2 other p
 
 1. Run `./tests/integration/simulate-composer-install.sh`
 
-	The script will prompt you for any necessary information, reset the build/ dir for use, write the appropriate "composer.json" changes for you, and execute a `composer install` command for you in the build/ dir where you can review the results.
+    The script will prompt you for any necessary information, reset the build/ dir for use, write the appropriate "composer.json" changes for you, and execute a `composer install` command for you in the build/ dir where you can review the results.
 
-	* The `build/` folder should end up with a `Vagrantfile` and `puphpet/` folder in it.
-	* The sample `build/puphpet.yaml` file should have been copied to `build/puphpet/config.yaml`.
-	* The sample `.gitignore` file should have been "safely" updated to include the new additions to the "root" project folder (`build/`).
+    * The `build/` folder should end up with a `Vagrantfile` and `puphpet/` folder in it.
+    * The sample `build/puphpet.yaml` file should have been copied to `build/puphpet/config.yaml`.
+    * The sample `.gitignore` file should have been "safely" updated to include the new additions to the "root" project folder (`build/`).
 
 1. From here, the process loops through the following steps:
-	* Make changes to the puphpet-release or puphpet-release-composer-installer projects.
-	* **Commit** the changes to your working branch.
-	* Run `./tests/integration/simulate-composer-install.sh` again.
-	* Check the results in the `build/` directory.
-	* Repeat.
+    * Make changes to the puphpet-release or puphpet-release-composer-installer projects.
+    * **Commit** the changes to your working branch.
+    * Run `./tests/integration/simulate-composer-install.sh` again.
+    * Check the results in the `build/` directory.
+    * Repeat.
 
 1. Once you're satisfied with the results, push your branch and submit a PR.
 
