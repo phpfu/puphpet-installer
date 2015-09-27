@@ -221,6 +221,8 @@ testGitignore () {
 
     grep -qe '^/Vagrantfile$' "${BUILD_DIR}/.gitignore"
     assertTrue ".gitignore must have a '/Vagrantfile' entry." "$?"
+
+    assertEquals ".gitignore must end in a new line." 1 $(tail -c1 ${BUILD_DIR}/.gitignore | wc -l)
 }
 
 testPuphpetDir () {
