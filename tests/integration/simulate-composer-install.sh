@@ -198,14 +198,29 @@ ${COMPOSER_OUTPUT}
 }
 
 testGitignore () {
-    grep -qe '^/Vagrantfile$' "${BUILD_DIR}/.gitignore"
-    assertTrue ".gitignore must have a '/Vagrantfile' entry." "$?"
-
-    grep -qe '^/puphpet/$' "${BUILD_DIR}/.gitignore"
-    assertTrue ".gitignore must have a '/puphpet/' entry." "$?"
-
     grep -qe '^/.vagrant/$' "${BUILD_DIR}/.gitignore"
     assertTrue ".gitignore must have a '/.vagrant/' entry." "$?"
+
+    grep -qe '^/puphpet/files/dot/$' "${BUILD_DIR}/.gitignore"
+    assertTrue ".gitignore must have a '/puphpet/files/dot/' entry." "$?"
+
+    grep -qe '^/puphpet/puppet/$' "${BUILD_DIR}/.gitignore"
+    assertTrue ".gitignore must have a '/puphpet/puppet/' entry." "$?"
+
+    grep -qe '^/puphpet/ruby/$' "${BUILD_DIR}/.gitignore"
+    assertTrue ".gitignore must have a '/puphpet/ruby/' entry." "$?"
+
+    grep -qe '^/puphpet/shell/$' "${BUILD_DIR}/.gitignore"
+    assertTrue ".gitignore must have a '/puphpet/shell/' entry." "$?"
+
+    grep -qe '^/puphpet/vagrant/$' "${BUILD_DIR}/.gitignore"
+    assertTrue ".gitignore must have a '/puphpet/vagrant/' entry." "$?"
+
+    grep -qe '^/puphpet/config-custom.yaml$' "${BUILD_DIR}/.gitignore"
+    assertTrue ".gitignore must have a '/puphpet/config-custom.yaml' entry." "$?"
+
+    grep -qe '^/Vagrantfile$' "${BUILD_DIR}/.gitignore"
+    assertTrue ".gitignore must have a '/Vagrantfile' entry." "$?"
 }
 
 testPuphpetDir () {

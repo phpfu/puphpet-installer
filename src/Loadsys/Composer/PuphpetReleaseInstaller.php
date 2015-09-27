@@ -112,9 +112,14 @@ class PuphpetReleaseInstaller extends LibraryInstaller
 
         $gitignoreFile = getcwd() . DS . '.gitignore';
         $required = [
-            '/Vagrantfile',
-            '/puphpet/',
             '/.vagrant/',
+            '/puphpet/files/dot/',
+            '/puphpet/puppet/',
+            '/puphpet/ruby/',
+            '/puphpet/shell/',
+            '/puphpet/vagrant/',
+            '/puphpet/config-custom.yaml',
+            '/Vagrantfile',
         ];
 
         touch($gitignoreFile);
