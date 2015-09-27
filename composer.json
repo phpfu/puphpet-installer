@@ -25,11 +25,10 @@
         "class": "Loadsys\\Composer\\PuphpetReleaseInstallerPlugin"
     },
     "require": {
-        "composer-plugin-api": "1.0.0",
-        "symfony/filesystem": "~2.6"
+        "composer-plugin-api": "^1.0"
     },
     "require-dev": {
-        "composer/composer": "1.0.*@dev",
-        "phpunit/phpunit": "~4.1"
+        "composer/composer": "1.0.x-dev",
+        "phpunit/phpunit": "^4.0"
     }
 }
