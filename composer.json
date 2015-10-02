@@ -1,5 +1,5 @@
 {
-    "name": "loadsys/puphpet-release-composer-installer",
+    "name": "phpfu/puphpet-installer",
     "description": "Provides a composer custom installer that works with `loadsys/puphpet-release` to add a PuPHPet.com vagrant box to a project via composer. DANGEROUS! Overwrites non-vendor files! Seriously, don't use this, or read the readme VERY carefully.",
     "keywords": [
     	"puphpet",
