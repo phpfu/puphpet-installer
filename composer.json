@@ -2,11 +2,11 @@
     "name": "phpfu/puphpet-installer",
     "description": "Provides a composer custom installer that works with `loadsys/puphpet-release` to add a PuPHPet.com vagrant box to a project via composer. DANGEROUS! Overwrites non-vendor files! Seriously, don't use this, or read the readme VERY carefully.",
     "keywords": [
-    	"puphpet",
-    	"vagrant",
-    	"dangerous",
-    	"do-not-use",
-    	"overwrites-files"
+        "puphpet",
+        "vagrant",
+        "dangerous",
+        "do-not-use",
+        "overwrites-files"
     ],
     "type": "composer-plugin",
     "license": "MIT",
@@ -25,11 +25,10 @@
         "class": "Loadsys\\Composer\\PuphpetReleaseInstallerPlugin"
     },
     "require": {
-        "composer-plugin-api": "1.0.0",
-        "symfony/filesystem": "~2.6"
+        "composer-plugin-api": "^1.0"
     },
     "require-dev": {
-        "composer/composer": "1.0.*@dev",
-        "phpunit/phpunit": "~4.1"
+        "composer/composer": "1.0.x-dev",
+        "phpunit/phpunit": "^4.0"
     }
 }

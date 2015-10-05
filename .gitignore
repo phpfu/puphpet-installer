@@ -1,5 +1,3 @@
-# Ignore composer deps.
+/build/
 /vendor/
-
-# Ignore the folder we use when testing the installer.
-/build/*
+.php_cs.cache

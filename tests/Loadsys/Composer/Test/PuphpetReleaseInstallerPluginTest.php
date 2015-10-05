@@ -1,20 +1,33 @@
 <?php
+
 namespace Loadsys\Composer\Test;
 
+use Composer\IO\IOInterface;
 use Loadsys\Composer\PuphpetReleaseInstallerPlugin;
-use Composer\Repository\RepositoryManager;
-use Composer\Repository\InstalledArrayRepository;
 use Composer\Package\Package;
-use Composer\Package\RootPackage;
-use Composer\Package\Link;
-use Composer\Package\Version\VersionParser;
 use Composer\Composer;
 use Composer\Config;
 
-class PuphpetReleaseInstallerPluginTest extends \PHPUnit_Framework_TestCase {
+class PuphpetReleaseInstallerPluginTest extends \PHPUnit_Framework_TestCase
+{
+    /**
+     * @var Package
+     */
     private $package;
+
+    /**
+     * @var IOInterface
+     */
     private $io;
+
+    /**
+     * @var Composer
+     */
     private $composer;
+
+    /**
+     * @var PuphpetReleaseInstallerPlugin
+     */
     private $plugin;
 
     /**
@@ -22,7 +35,8 @@ class PuphpetReleaseInstallerPluginTest extends \PHPUnit_Framework_TestCase {
      *
      * @return void
      */
-    public function setUp() {
+    public function setUp()
+    {
         $this->package = new Package('CamelCased', '1.0', '1.0');
         $this->io = $this->getMock('Composer\IO\IOInterface');
         $this->composer = new Composer();
@@ -34,11 +48,9 @@ class PuphpetReleaseInstallerPluginTest extends \PHPUnit_Framework_TestCase {
      *
      * @return void
      */
-    public function tearDown() {
-        unset($this->package);
-        unset($this->io);
-        unset($this->composer);
-        unset($this->plugin);
+    public function tearDown()
+    {
+        unset($this->package, $this->io, $this->composer, $this->plugin);
     }
 
     /**
@@ -47,10 +59,11 @@ class PuphpetReleaseInstallerPluginTest extends \PHPUnit_Framework_TestCase {
      *
      * @return void
      */
-    public function testActivate() {
+    public function testActivate()
+    {
         $this->composer = $this->getMock('Composer\Composer', [
-        	'getInstallationManager',
-        	'addInstaller'
+            'getInstallationManager',
+            'addInstaller'
         ]);
         $this->composer->setConfig(new Config(false));
 
